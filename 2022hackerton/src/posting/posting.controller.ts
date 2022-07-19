@@ -1,13 +1,11 @@
 import {
-  Bind,
   Body,
   Controller,
   Get,
   Param,
   Post,
-  Put,
   Query,
-  UploadedFiles,
+  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -74,9 +72,8 @@ export class PostingController {
 
   @Post('/image')
   @UseInterceptors(FileInterceptor('image', multerDiskOptions))
-  @Bind(UploadedFiles)
   async uploadImage(
-    @UploadedFiles() file: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<BaseResponse<string>> {
     return BaseResponse.successResponse(
       '사진 업로드 성공',
