@@ -9,6 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import Auth from 'src/auth/entity/auth.entity';
 import { multerDiskOptions } from 'src/config/multer/multer.option';
@@ -21,7 +22,10 @@ import { PostingService } from './posting.service';
 
 @Controller('/posting')
 export class PostingController {
-  constructor(private readonly postingService: PostingService) {}
+  constructor(
+    private readonly postingService: PostingService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @UseGuards(TokenGuard)
   @Get('/')
@@ -38,11 +42,13 @@ export class PostingController {
   }
 
   @UseGuards(TokenGuard)
-  @Get('/movie/genre/:genre')
-  async getPostByGenre(
-    @Param('genre') genre: string,
+  @Get('/movie/category/:category')
+  async getPostBycategory(
+    @Param('category') category: string,
   ): Promise<BaseResponse<Posting>> {
-    const posts: Posting[] = await this.postingService.getPostByGenre(genre);
+    const posts: Posting[] = await this.postingService.getPostByCategory(
+      category,
+    );
     return BaseResponse.successResponse('해당 장르의 게시글 조회 성공', posts);
   }
 
@@ -84,9 +90,10 @@ export class PostingController {
   async uploadImage(
     @UploadedFile() file: Express.Multer.File,
   ): Promise<BaseResponse<string>> {
+    const port: string = await this.configService.get<string>('PORT');
     return BaseResponse.successResponse(
       '사진 업로드 성공',
-      `http://localhost:6023/${file.path}`,
+      `http://:${port}/${file.path}`,
     );
   }
 }

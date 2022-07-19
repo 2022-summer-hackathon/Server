@@ -1,4 +1,5 @@
 import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import PostInfoDto from './postInfo.dto';
 
 export default class PostDto {
   @IsString()
@@ -7,11 +8,7 @@ export default class PostDto {
 
   @IsArray()
   @IsNotEmpty()
-  text!: string[];
-
-  @IsArray()
-  @IsNotEmpty()
-  image!: string[];
+  postInfo: PostInfoDto[];
 
   @IsNumber()
   @IsNotEmpty()
@@ -19,9 +16,5 @@ export default class PostDto {
 
   @IsString()
   @IsNotEmpty()
-  category!: string;
-
-  @IsString()
-  @IsNotEmpty()
-  genre!: string[];
+  category!: string[];
 }

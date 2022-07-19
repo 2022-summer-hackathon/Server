@@ -7,7 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import Genre from './genre.entity';
+import Category from './category.entity';
 import PostingInfo from './postingInfo.entity';
 
 @Entity('posting')
@@ -27,8 +27,8 @@ export default class Posting {
   })
   star!: number;
 
-  @OneToMany(() => Genre, (genre) => genre.posting)
-  genre: Genre;
+  @OneToMany(() => Category, (category) => category.posting)
+  category: Category;
 
   @OneToMany(() => PostingInfo, (postingInfo) => postingInfo.posting)
   postingInfo: PostingInfo;

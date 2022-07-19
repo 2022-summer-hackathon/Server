@@ -7,14 +7,14 @@ export class PostingRepository extends Repository<Posting> {
   public getPosts(): Promise<Posting[]> {
     return this.createQueryBuilder('posting')
       .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
-      .leftJoinAndSelect('posting.genre', 'genre')
+      .leftJoinAndSelect('posting.category', 'category')
       .getMany();
   }
 
   public getPostByIdx(idx: number): Promise<Posting> {
     return this.createQueryBuilder('posting')
       .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
-      .leftJoinAndSelect('posting.genre', 'genre')
+      .leftJoinAndSelect('posting.category', 'category')
       .where('idx = :idx', { idx })
       .getOne();
   }
@@ -23,7 +23,7 @@ export class PostingRepository extends Repository<Posting> {
     return this.createQueryBuilder('posting')
       .leftJoinAndSelect('posting.user', 'user')
       .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
-      .leftJoinAndSelect('posting.genre', 'genre')
+      .leftJoinAndSelect('posting.category', 'category')
       .where('posting.idx = :idx', { idx: idx })
       .getOne();
   }
@@ -31,15 +31,15 @@ export class PostingRepository extends Repository<Posting> {
   public getPostByMovie(movie: string): Promise<Posting[]> {
     return this.createQueryBuilder('posting')
       .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
-      .leftJoinAndSelect('posting.genre', 'genre')
+      .leftJoinAndSelect('posting.category', 'category')
       .where('movie = :movie', { movie })
       .getMany();
   }
 
-  public getPostByGenre(genre: string): Promise<Posting[]> {
+  public getPostByCategory(category: string): Promise<Posting[]> {
     return this.createQueryBuilder('posting')
-      .leftJoinAndSelect('posting.genre', 'genre')
-      .where('genre.genre = :genre', { genre })
+      .leftJoinAndSelect('posting.category', 'category')
+      .where('category.category = :category', { category })
       .getMany();
   }
 }

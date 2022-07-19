@@ -3,7 +3,7 @@ import { AuthService } from 'src/auth/auth.service';
 import Auth from 'src/auth/entity/auth.entity';
 import PostDto from './dto/post.dto';
 import Posting from './entity/posting.entity';
-import { GenreRepository } from './repository/genre.repository';
+import { CategoryRepository } from './repository/category.repository';
 import { PostingRepository } from './repository/posting.repository';
 import { PostingInfoRepository } from './repository/postingInfo.repository';
 
@@ -12,7 +12,7 @@ export class PostingService {
   constructor(
     private readonly postingRepository: PostingRepository,
     private readonly postingInfoRepository: PostingInfoRepository,
-    private readonly genreRepository: GenreRepository,
+    private readonly categoryRepository: CategoryRepository,
     private readonly authService: AuthService,
   ) {}
 
@@ -29,8 +29,10 @@ export class PostingService {
     return postData;
   }
 
-  async getPostByGenre(genre: string): Promise<Posting[]> {
-    const posts: Posting[] = await this.postingRepository.getPostByGenre(genre);
+  async getPostByCategory(category: string): Promise<Posting[]> {
+    const posts: Posting[] = await this.postingRepository.getPostByCategory(
+      category,
+    );
     return posts;
   }
 
@@ -62,21 +64,21 @@ export class PostingService {
       user: userData.user,
       ...info,
     });
-    for (let i = 0; i < dto.text.length; i++) {
+    for (let i = 0; i < dto.postInfo[i].text.length; i++) {
       const info: Object = {
-        text: dto.text[i],
-        image: dto.image[i],
+        text: dto.postInfo[i].text,
+        image: dto.postInfo[i].image,
       };
       await this.postingInfoRepository.save({
         posting: post,
         ...info,
       });
     }
-    for (let i = 0; i < dto.genre.length; i++) {
-      const genre: Object = { genre: dto.genre[i] };
-      await this.genreRepository.save({
+    for (let i = 0; i < dto.category.length; i++) {
+      const category: Object = { category: dto.category[i] };
+      await this.categoryRepository.save({
         posting: post,
-        ...genre,
+        ...category,
       });
     }
   }
