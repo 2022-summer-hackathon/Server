@@ -1,7 +1,7 @@
-import User from 'src/user/entity/user.entity';
+import Auth from '../entity/auth.entity';
 
 export interface IloginData {
-  userData: User;
+  userData: Auth;
   token: string;
   refreshToken: string;
 }

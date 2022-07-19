@@ -15,24 +15,22 @@ export default class User {
   idx!: number;
 
   @Column({
-    name: 'email',
+    name: 'name',
   })
-  email!: string;
+  name!: string;
+
+  @Column({})
+  @Column({
+    name: 'level',
+    default: 0,
+  })
+  level!: number;
 
   @Column({
-    name: 'grade',
+    name: 'exp',
+    default: '0',
   })
-  grade!: number;
-
-  @Column({
-    name: 'room',
-  })
-  room!: number;
-
-  @Column({
-    name: 'number',
-  })
-  number!: number;
+  exp!: number;
 
   @JoinColumn({ name: 'fk_auth_id' })
   @OneToOne(() => Auth, (auth) => auth.user)

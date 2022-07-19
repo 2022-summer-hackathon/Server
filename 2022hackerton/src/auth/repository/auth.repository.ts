@@ -1,7 +1,8 @@
 import Auth from '../entity/auth.entity';
-import { EntityRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
+import { CustomRepository } from 'src/global/decorate/custom.repository';
 
-@EntityRepository(Auth)
+@CustomRepository(Auth)
 export class AuthRepository extends Repository<Auth> {
   public findAuthById(id: string): Promise<Auth> {
     return this.createQueryBuilder('auth').where('id = :id', { id }).getOne();
