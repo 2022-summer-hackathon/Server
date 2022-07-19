@@ -1,4 +1,4 @@
-import { Body, Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import Auth from 'src/auth/entity/auth.entity';
 import { Token } from 'src/global/decorate/token.deocorate';
 import TokenGuard from 'src/global/guard/token.guard';

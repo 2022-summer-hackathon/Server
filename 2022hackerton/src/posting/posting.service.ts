@@ -1,12 +1,7 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import Auth from 'src/auth/entity/auth.entity';
 import PostDto from './dto/post.dto';
-import Genre from './entity/genre.entity';
 import Posting from './entity/posting.entity';
 import { GenreRepository } from './repository/genre.repository';
 import { PostingRepository } from './repository/posting.repository';
