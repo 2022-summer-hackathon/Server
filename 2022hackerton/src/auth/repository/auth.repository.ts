@@ -5,6 +5,9 @@ import { CustomRepository } from 'src/global/decorate/custom.repository';
 @CustomRepository(Auth)
 export class AuthRepository extends Repository<Auth> {
   public findAuthById(id: string): Promise<Auth> {
-    return this.createQueryBuilder('auth').where('id = :id', { id }).getOne();
+    return this.createQueryBuilder('auth')
+      .leftJoinAndSelect('auth.user', 'user')
+      .where('id = :id', { id })
+      .getOne();
   }
 }
