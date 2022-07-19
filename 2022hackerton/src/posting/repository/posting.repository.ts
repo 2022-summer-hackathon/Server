@@ -8,6 +8,7 @@ export class PostingRepository extends Repository<Posting> {
     return this.createQueryBuilder('posting')
       .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
       .leftJoinAndSelect('posting.category', 'category')
+      .leftJoinAndSelect('posting.user', 'user')
       .getMany();
   }
 
@@ -15,6 +16,7 @@ export class PostingRepository extends Repository<Posting> {
     return this.createQueryBuilder('posting')
       .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
       .leftJoinAndSelect('posting.category', 'category')
+      .leftJoinAndSelect('posting.user', 'user')
       .where('idx = :idx', { idx })
       .getOne();
   }
@@ -32,13 +34,16 @@ export class PostingRepository extends Repository<Posting> {
     return this.createQueryBuilder('posting')
       .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
       .leftJoinAndSelect('posting.category', 'category')
+      .leftJoinAndSelect('posting.user', 'user')
       .where('movie = :movie', { movie })
       .getMany();
   }
 
   public getPostByCategory(category: string): Promise<Posting[]> {
     return this.createQueryBuilder('posting')
+      .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
       .leftJoinAndSelect('posting.category', 'category')
+      .leftJoinAndSelect('posting.user', 'user')
       .where('category.category = :category', { category })
       .getMany();
   }

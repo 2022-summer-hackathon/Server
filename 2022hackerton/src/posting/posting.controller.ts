@@ -93,7 +93,7 @@ export class PostingController {
     const port: string = await this.configService.get<string>('PORT');
     return BaseResponse.successResponse(
       '사진 업로드 성공',
-      `http://:${port}/${file.path}`,
+      `http://192.168.220.35:${port}/${file.path}`,
     );
   }
 }

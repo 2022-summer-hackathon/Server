@@ -58,13 +58,14 @@ export class PostingService {
     const info: Object = {
       movie: dto.movie,
       star: dto.star,
-      category: dto.category,
     };
     const post: Posting = await this.postingRepository.save({
       user: userData.user,
       ...info,
     });
-    for (let i = 0; i < dto.postInfo[i].text.length; i++) {
+    const infoLengh: number = dto.postInfo.length;
+
+    for (let i = 0; i < infoLengh; i++) {
       const info: Object = {
         text: dto.postInfo[i].text,
         image: dto.postInfo[i].image,
@@ -75,10 +76,10 @@ export class PostingService {
       });
     }
     for (let i = 0; i < dto.category.length; i++) {
-      const category: Object = { category: dto.category[i] };
+      const info: Object = { category: dto.category[i] };
       await this.categoryRepository.save({
         posting: post,
-        ...category,
+        ...info,
       });
     }
   }

@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import Category from './category.entity';
+import LikeUser from './likeUser.entity';
 import PostingInfo from './postingInfo.entity';
 
 @Entity('posting')
@@ -27,6 +28,11 @@ export default class Posting {
   })
   star!: number;
 
+  @Column({
+    name: 'like_cound',
+  })
+  likeCount!: number;
+
   @OneToMany(() => Category, (category) => category.posting)
   category: Category;
 
@@ -36,4 +42,7 @@ export default class Posting {
   @JoinColumn({ name: 'fk_user_idx' })
   @ManyToOne(() => User, (user) => user.posting)
   user: User;
+
+  @OneToMany(() => LikeUser, (likeUser) => likeUser.user)
+  likeUser: LikeUser;
 }

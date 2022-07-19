@@ -14,7 +14,7 @@ export default class PostDto {
   @IsNotEmpty()
   star!: number;
 
-  @IsString()
+  @IsArray()
   @IsNotEmpty()
   category!: string[];
 }

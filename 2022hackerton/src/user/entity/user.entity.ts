@@ -1,4 +1,5 @@
 import Auth from 'src/auth/entity/auth.entity';
+import LikeUser from 'src/posting/entity/likeUser.entity';
 import Posting from 'src/posting/entity/posting.entity';
 import {
   Column,
@@ -40,4 +41,7 @@ export default class User {
 
   @OneToMany(() => Posting, (posting) => posting.user)
   posting: Posting;
+
+  @OneToOne(() => LikeUser, (likeUser) => likeUser.user)
+  likeUser: LikeUser;
 }
