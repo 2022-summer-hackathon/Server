@@ -1,7 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import BaseResponse from 'src/global/response/baseResponse';
 import { AuthService } from './auth.service';
-import CodeLogin from './dto/code.dto';
 import DauthLoginDto from './dto/dauth.login.dto';
 import { IloginData } from './interface/IloginData';
 
