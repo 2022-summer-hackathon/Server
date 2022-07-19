@@ -14,6 +14,7 @@ import { AuthRepository } from './repository/auth.repository';
 import axios, { AxiosResponse } from 'axios';
 import { TokenService } from 'src/token/token.service';
 import { IloginData } from './interface/IloginData';
+import User from 'src/user/entity/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -55,6 +56,22 @@ export class AuthService {
         },
       );
 
+      const userData: User = result.data.data;
+
+      let user: Auth = await this.authRepository.findAuthById(
+        result.data.data.uniqueId,
+      );
+
+      if (user === undefined || user === null) {
+        const authData: Auth = await this.authRepository.create({
+          id: result.data.data.uniqueId,
+          name: result.data.data.name,
+          accessLevel: result.data.data.accessLevel,
+          profileImage: result.data.data.profileImage,
+        });
+        await this.authRepository.save(authData);
+      }
+
       const token: string = await this.tokenService.generateToken(
         result.data.data.uniqueId,
       );
@@ -69,7 +86,7 @@ export class AuthService {
       ) {
         throw new ForbiddenException('토큰이 발급되지 않았습니다');
       }
-      return { token, refreshToken };
+      return { userData, token, refreshToken };
     } catch (error) {
       switch (error.status) {
         case 400:
