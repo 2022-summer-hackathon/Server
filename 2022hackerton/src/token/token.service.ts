@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
-import { IToken, ITokenPayload } from './dto/IToken';
+import { IToken, ITokenPayload } from './interface/IToken';
 
 @Injectable()
 export class TokenService {
