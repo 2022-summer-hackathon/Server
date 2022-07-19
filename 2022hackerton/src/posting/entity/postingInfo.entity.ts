@@ -28,6 +28,6 @@ export default class PostingInfo {
   image: string;
 
   @JoinColumn({ name: 'fk_posting_idx' })
-  @ManyToOne(() => Posting, (posting) => posting.idx)
+  @ManyToOne(() => Posting, (posting) => posting.postingInfo)
   posting: Posting;
 }

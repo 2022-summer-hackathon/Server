@@ -28,11 +28,10 @@ export default class Posting {
   })
   star!: number;
 
-  @JoinColumn({ name: 'fk_genre_idx' })
-  @OneToMany(() => Genre, (genre) => genre.idx)
+  @OneToMany(() => Genre, (genre) => genre.posting)
   genre: Genre;
 
-  @OneToMany(() => PostingInfo, (postingInfo) => postingInfo.idx)
+  @OneToMany(() => PostingInfo, (postingInfo) => postingInfo.posting)
   postingInfo: PostingInfo;
 
   @JoinColumn({ name: 'fk_user_idx' })

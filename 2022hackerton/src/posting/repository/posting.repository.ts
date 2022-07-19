@@ -35,4 +35,11 @@ export class PostingRepository extends Repository<Posting> {
       .where('movie = :movie', { movie })
       .getMany();
   }
+
+  public getPostByGenre(genre: string): Promise<Posting[]> {
+    return this.createQueryBuilder('posting')
+      .leftJoinAndSelect('posting.genre', 'genre')
+      .where('genre.genre = :genre', { genre })
+      .getMany();
+  }
 }

@@ -38,6 +38,15 @@ export class PostingController {
   }
 
   @UseGuards(TokenGuard)
+  @Get('/movie/genre/:genre')
+  async getPostByGenre(
+    @Param('genre') genre: string,
+  ): Promise<BaseResponse<Posting>> {
+    const posts: Posting[] = await this.postingService.getPostByGenre(genre);
+    return BaseResponse.successResponse('해당 장르의 게시글 조회 성공', posts);
+  }
+
+  @UseGuards(TokenGuard)
   @Get('/movie/title')
   async getPostByMovieTitle(
     @Body() movie: any,

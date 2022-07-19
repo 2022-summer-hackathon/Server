@@ -20,6 +20,6 @@ export default class Genre {
   genre: string;
 
   @JoinColumn({ name: 'fk_posting_idx' })
-  @ManyToOne(() => Posting, (posting) => posting.idx)
+  @ManyToOne(() => Posting, (posting) => posting.genre)
   posting: Posting;
 }

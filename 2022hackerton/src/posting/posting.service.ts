@@ -34,6 +34,11 @@ export class PostingService {
     return postData;
   }
 
+  async getPostByGenre(genre: string): Promise<Posting[]> {
+    const posts: Posting[] = await this.postingRepository.getPostByGenre(genre);
+    return posts;
+  }
+
   async getPostsByMovie(movie: string): Promise<Posting[]> {
     const posts: Posting[] = await this.postingRepository.getPostByMovie(movie);
     return posts;
@@ -73,7 +78,6 @@ export class PostingService {
       });
     }
     for (let i = 0; i < dto.genre.length; i++) {
-      console.log();
       const genre: Object = { genre: dto.genre[i] };
       await this.genreRepository.save({
         posting: post,
