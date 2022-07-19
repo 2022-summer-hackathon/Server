@@ -5,6 +5,7 @@ import { TypeOrmExModule } from 'src/global/decorate/repository.decorate';
 import { TokenModule } from 'src/token/token.module';
 import { PostingController } from './posting.controller';
 import { PostingService } from './posting.service';
+import { GenreRepository } from './repository/genre.repository';
 import { PostingRepository } from './repository/posting.repository';
 import { PostingInfoRepository } from './repository/postingInfo.repository';
 
@@ -16,6 +17,7 @@ import { PostingInfoRepository } from './repository/postingInfo.repository';
     TypeOrmExModule.forCustomRepository([
       PostingRepository,
       PostingInfoRepository,
+      GenreRepository,
     ]),
     TokenModule,
     AuthModule,

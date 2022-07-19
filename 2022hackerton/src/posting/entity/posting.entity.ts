@@ -3,6 +3,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -28,7 +29,7 @@ export default class Posting {
   star!: number;
 
   @JoinColumn({ name: 'fk_genre_idx' })
-  @ManyToOne(() => Genre, (genre) => genre.idx)
+  @OneToMany(() => Genre, (genre) => genre.idx)
   genre: Genre;
 
   @OneToMany(() => PostingInfo, (postingInfo) => postingInfo.idx)

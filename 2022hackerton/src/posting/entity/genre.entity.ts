@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import Posting from './posting.entity';
 
 @Entity('genre')
 export default class Genre {
@@ -10,5 +17,9 @@ export default class Genre {
   @Column({
     name: 'genre',
   })
-  genre!: string;
+  genre: string;
+
+  @JoinColumn({ name: 'fk_posting_idx' })
+  @ManyToOne(() => Posting, (posting) => posting.idx)
+  posting: Posting;
 }

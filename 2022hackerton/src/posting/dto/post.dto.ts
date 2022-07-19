@@ -23,5 +23,5 @@ export default class PostDto {
 
   @IsString()
   @IsNotEmpty()
-  genre!: string;
+  genre!: string[];
 }

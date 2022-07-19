@@ -7,12 +7,14 @@ export class PostingRepository extends Repository<Posting> {
   public getPosts(): Promise<Posting[]> {
     return this.createQueryBuilder('posting')
       .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
+      .leftJoinAndSelect('posting.genre', 'genre')
       .getMany();
   }
 
   public getPostByIdx(idx: number): Promise<Posting> {
     return this.createQueryBuilder('posting')
       .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
+      .leftJoinAndSelect('posting.genre', 'genre')
       .where('idx = :idx', { idx })
       .getOne();
   }
@@ -21,6 +23,7 @@ export class PostingRepository extends Repository<Posting> {
     return this.createQueryBuilder('posting')
       .leftJoinAndSelect('posting.user', 'user')
       .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
+      .leftJoinAndSelect('posting.genre', 'genre')
       .where('posting.idx = :idx', { idx: idx })
       .getOne();
   }
@@ -28,6 +31,7 @@ export class PostingRepository extends Repository<Posting> {
   public getPostByMovie(movie: string): Promise<Posting[]> {
     return this.createQueryBuilder('posting')
       .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
+      .leftJoinAndSelect('posting.genre', 'genre')
       .where('movie = :movie', { movie })
       .getMany();
   }

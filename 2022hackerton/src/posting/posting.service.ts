@@ -6,7 +6,9 @@ import {
 import { AuthService } from 'src/auth/auth.service';
 import Auth from 'src/auth/entity/auth.entity';
 import PostDto from './dto/post.dto';
+import Genre from './entity/genre.entity';
 import Posting from './entity/posting.entity';
+import { GenreRepository } from './repository/genre.repository';
 import { PostingRepository } from './repository/posting.repository';
 import { PostingInfoRepository } from './repository/postingInfo.repository';
 
@@ -15,6 +17,7 @@ export class PostingService {
   constructor(
     private readonly postingRepository: PostingRepository,
     private readonly postingInfoRepository: PostingInfoRepository,
+    private readonly genreRepository: GenreRepository,
     private readonly authService: AuthService,
   ) {}
 
@@ -54,7 +57,6 @@ export class PostingService {
       movie: dto.movie,
       star: dto.star,
       category: dto.category,
-      genre: dto.genre,
     };
     const post: Posting = await this.postingRepository.save({
       user: userData.user,
@@ -65,19 +67,17 @@ export class PostingService {
         text: dto.text[i],
         image: dto.image[i],
       };
-
-      console.log({ text: dto.text[i], image: dto.image[i] });
-
-      const info2 = this.postingInfoRepository.create({
-        text: dto.text[i],
-        image: dto.image[i],
-      });
-
-      console.log(info2.text);
-
       await this.postingInfoRepository.save({
         posting: post,
         ...info,
+      });
+    }
+    for (let i = 0; i < dto.genre.length; i++) {
+      console.log();
+      const genre: Object = { genre: dto.genre[i] };
+      await this.genreRepository.save({
+        posting: post,
+        ...genre,
       });
     }
   }
