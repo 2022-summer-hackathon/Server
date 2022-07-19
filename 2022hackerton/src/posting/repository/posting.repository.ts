@@ -12,21 +12,12 @@ export class PostingRepository extends Repository<Posting> {
       .getMany();
   }
 
-  public getPostByIdx(idx: number): Promise<Posting> {
+  public getPostByIdxWithInfo(idx: number): Promise<Posting> {
     return this.createQueryBuilder('posting')
       .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
       .leftJoinAndSelect('posting.category', 'category')
       .leftJoinAndSelect('posting.user', 'user')
       .where('idx = :idx', { idx })
-      .getOne();
-  }
-
-  public getPostByUser(idx: number): Promise<Posting> {
-    return this.createQueryBuilder('posting')
-      .leftJoinAndSelect('posting.user', 'user')
-      .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
-      .leftJoinAndSelect('posting.category', 'category')
-      .where('posting.idx = :idx', { idx: idx })
       .getOne();
   }
 
@@ -46,5 +37,11 @@ export class PostingRepository extends Repository<Posting> {
       .leftJoinAndSelect('posting.user', 'user')
       .where('category.category = :category', { category })
       .getMany();
+  }
+
+  public getPostByIdx(idx: number): Promise<Posting> {
+    return this.createQueryBuilder('posting')
+      .where('idx = :idx', { idx })
+      .getOne();
   }
 }

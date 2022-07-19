@@ -11,4 +11,10 @@ export class UserRepository extends Repository<User> {
       .where('user.idx = :idx', { idx })
       .getOne();
   }
+
+  public findUser(idx: number): Promise<User> {
+    return this.createQueryBuilder('user')
+      .where('idx = :idx', { idx })
+      .getOne();
+  }
 }

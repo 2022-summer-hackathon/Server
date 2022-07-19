@@ -85,6 +85,26 @@ export class PostingController {
     return BaseResponse.successResponse('게시글 생성 성공');
   }
 
+  @UseGuards(TokenGuard)
+  @Post('/plus')
+  async plusLikeCount(
+    @Token() user: Auth,
+    @Param('idx') idx: number,
+  ): Promise<BaseResponse<void>> {
+    await this.postingService.plusLikeCountInPost(idx, user);
+    return BaseResponse.successResponse('성공');
+  }
+
+  @UseGuards(TokenGuard)
+  @Post('/minus')
+  async minusLikeCount(
+    @Token() user: Auth,
+    @Param('idx') idx: number,
+  ): Promise<BaseResponse<void>> {
+    await this.postingService.minusLikeCountInPost(idx, user);
+    return BaseResponse.successResponse('성공');
+  }
+
   @Post('/image')
   @UseInterceptors(FileInterceptor('image', multerDiskOptions))
   async uploadImage(

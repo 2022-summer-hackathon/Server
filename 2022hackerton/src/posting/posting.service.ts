@@ -1,9 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import Auth from 'src/auth/entity/auth.entity';
+import User from 'src/user/entity/user.entity';
+import { UserService } from 'src/user/user.service';
 import PostDto from './dto/post.dto';
 import Posting from './entity/posting.entity';
 import { CategoryRepository } from './repository/category.repository';
+import { LikeUserRepository } from './repository/liekUser.repository';
 import { PostingRepository } from './repository/posting.repository';
 import { PostingInfoRepository } from './repository/postingInfo.repository';
 
@@ -13,7 +16,9 @@ export class PostingService {
     private readonly postingRepository: PostingRepository,
     private readonly postingInfoRepository: PostingInfoRepository,
     private readonly categoryRepository: CategoryRepository,
+    private readonly likeUserrepository: LikeUserRepository,
     private readonly authService: AuthService,
+    private readonly userServie: UserService,
   ) {}
 
   async getPosts(): Promise<Posting[]> {
@@ -22,7 +27,9 @@ export class PostingService {
   }
 
   async getPostByIdx(idx: number): Promise<Posting> {
-    const postData: Posting = await this.postingRepository.getPostByIdx(idx);
+    const postData: Posting = await this.postingRepository.getPostByIdxWithInfo(
+      idx,
+    );
     if (postData === null || postData === undefined) {
       throw new NotFoundException('해당 idx를 가진 게시글은 없습니다');
     }
@@ -82,6 +89,31 @@ export class PostingService {
         ...info,
       });
     }
+  }
+
+  async plusLikeCountInPost(idx: number, user: Auth): Promise<void> {
+    const post: Posting = await this.postingRepository.getPostByIdx(idx);
+    let count: Object = post.likeCount + 1;
+    const postData: Posting = await this.postingRepository.merge(post, count);
+    const savedPost = await this.postingRepository.save(postData);
+
+    const userData: User = await this.userServie.getUserByAuth(user);
+    const isLike: Object = { isLike: true };
+    await this.likeUserrepository.save({
+      user: userData,
+      posting: savedPost,
+      ...isLike,
+    });
+  }
+
+  async minusLikeCountInPost(idx: number, user: Auth): Promise<void> {
+    const post: Posting = await this.postingRepository.getPostByIdx(idx);
+    let count: Object = post.likeCount - 1;
+    const postData: Posting = await this.postingRepository.merge(post, count);
+    await this.postingRepository.save(postData);
+
+    const userData: User = await this.userServie.getUserByAuth(user);
+    await this.likeUserrepository.delete(userData.idx);
   }
 
   async deletePost(idx: number): Promise<void> {
