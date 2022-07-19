@@ -86,7 +86,7 @@ export class PostingController {
   }
 
   @UseGuards(TokenGuard)
-  @Post('/plus')
+  @Post('/plus/:idx')
   async plusLikeCount(
     @Token() user: Auth,
     @Param('idx') idx: number,
@@ -96,7 +96,7 @@ export class PostingController {
   }
 
   @UseGuards(TokenGuard)
-  @Post('/minus')
+  @Post('/minus/:idx')
   async minusLikeCount(
     @Token() user: Auth,
     @Param('idx') idx: number,

@@ -1,3 +1,4 @@
+import Auth from 'src/auth/entity/auth.entity';
 import User from 'src/user/entity/user.entity';
 import {
   Column,
@@ -22,9 +23,9 @@ export default class LikeUser {
   })
   isLike!: boolean;
 
-  @JoinColumn({ name: 'fk_user_idx' })
-  @OneToOne(() => User, (user) => user.likeUser)
-  user: User;
+  @JoinColumn({ name: 'fk_auth_idx' })
+  @ManyToOne(() => Auth, (auth) => auth.likeUser)
+  user: Auth;
 
   @JoinColumn({ name: 'fk_posting.idx' })
   @ManyToOne(() => Posting, (posting) => posting.likeUser)

@@ -2,8 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import Auth from 'src/auth/entity/auth.entity';
 import User from 'src/user/entity/user.entity';
+import { UserRepository } from 'src/user/repository/user.repository';
 import { UserService } from 'src/user/user.service';
+import CountingDto from './dto/counting.dto';
+import IsValidDto from './dto/isValid.dto';
 import PostDto from './dto/post.dto';
+import LikeUser from './entity/likeUser.entity';
 import Posting from './entity/posting.entity';
 import { CategoryRepository } from './repository/category.repository';
 import { LikeUserRepository } from './repository/liekUser.repository';
@@ -16,7 +20,8 @@ export class PostingService {
     private readonly postingRepository: PostingRepository,
     private readonly postingInfoRepository: PostingInfoRepository,
     private readonly categoryRepository: CategoryRepository,
-    private readonly likeUserrepository: LikeUserRepository,
+    private readonly likeUserRepository: LikeUserRepository,
+    private readonly userRepository: UserRepository,
     private readonly authService: AuthService,
     private readonly userServie: UserService,
   ) {}
@@ -93,30 +98,43 @@ export class PostingService {
 
   async plusLikeCountInPost(idx: number, user: Auth): Promise<void> {
     const post: Posting = await this.postingRepository.getPostByIdx(idx);
-    let count: Object = post.likeCount + 1;
-    const postData: Posting = await this.postingRepository.merge(post, count);
-    const savedPost = await this.postingRepository.save(postData);
+    if (post === undefined || post === null) {
+      throw new NotFoundException('해당 게시글이 없습니다');
+    }
+    const count: number = await this.likeUserRepository.getLikeUserCount();
+    const dto: CountingDto = {
+      likeCount: count + 1,
+    };
 
-    const userData: User = await this.userServie.getUserByAuth(user);
-    const isLike: Object = { isLike: true };
-    await this.likeUserrepository.save({
-      user: userData,
-      posting: savedPost,
+    const postData: Posting = await this.postingRepository.merge(post, dto);
+    const savePost: Posting = await this.postingRepository.save(postData);
+
+    const isLike: IsValidDto = { isLike: true };
+    await this.likeUserRepository.save({
       ...isLike,
+      posting: savePost,
+      user: user,
     });
   }
 
   async minusLikeCountInPost(idx: number, user: Auth): Promise<void> {
     const post: Posting = await this.postingRepository.getPostByIdx(idx);
-    let count: Object = post.likeCount - 1;
-    const postData: Posting = await this.postingRepository.merge(post, count);
-    await this.postingRepository.save(postData);
+    if (post === undefined || post === null) {
+      throw new NotFoundException('해당 게시글이 없습니다');
+    }
+    const count: number = await this.likeUserRepository.getLikeUserCount();
+    const dto: CountingDto = {
+      likeCount: count - 1,
+    };
 
-    const userData: User = await this.userServie.getUserByAuth(user);
-    await this.likeUserrepository.delete(userData.idx);
-  }
+    const postData: Posting = await this.postingRepository.merge(post, dto);
+    const savePost: Posting = await this.postingRepository.save(postData);
 
-  async deletePost(idx: number): Promise<void> {
-    await this.postingRepository.delete(idx);
+    const isLike: IsValidDto = { isLike: false };
+    await this.likeUserRepository.save({
+      ...isLike,
+      posting: savePost,
+      user: user,
+    });
   }
 }

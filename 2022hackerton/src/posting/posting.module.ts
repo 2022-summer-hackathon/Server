@@ -3,6 +3,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { AuthModule } from 'src/auth/auth.module';
 import { TypeOrmExModule } from 'src/global/decorate/repository.decorate';
 import { TokenModule } from 'src/token/token.module';
+import { UserRepository } from 'src/user/repository/user.repository';
 import { UserModule } from 'src/user/user.module';
 import { PostingController } from './posting.controller';
 import { PostingService } from './posting.service';
@@ -21,6 +22,7 @@ import { PostingInfoRepository } from './repository/postingInfo.repository';
       PostingInfoRepository,
       CategoryRepository,
       LikeUserRepository,
+      UserRepository,
     ]),
     TokenModule,
     AuthModule,

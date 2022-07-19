@@ -30,6 +30,7 @@ export default class Posting {
 
   @Column({
     name: 'like_cound',
+    default: 0,
   })
   likeCount!: number;
 

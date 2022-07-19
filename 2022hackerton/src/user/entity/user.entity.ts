@@ -41,7 +41,4 @@ export default class User {
 
   @OneToMany(() => Posting, (posting) => posting.user)
   posting: Posting;
-
-  @OneToOne(() => LikeUser, (likeUser) => likeUser.user)
-  likeUser: LikeUser;
 }
