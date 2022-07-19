@@ -7,7 +7,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
+  @Get('/')
   async getUser(@Body() idx: number): Promise<BaseResponse<User>> {
     const user: User = await this.userService.getUserByIdx(idx);
     return BaseResponse.successResponse('성공', user);

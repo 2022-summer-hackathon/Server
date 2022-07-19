@@ -12,7 +12,6 @@ import Auth from 'src/auth/entity/auth.entity';
 import { Token } from 'src/global/decorate/token.deocorate';
 import TokenGuard from 'src/global/guard/token.guard';
 import BaseResponse from 'src/global/response/baseResponse';
-import User from 'src/user/entity/user.entity';
 import PostDto from './dto/post.dto';
 import Posting from './entity/posting.entity';
 import { PostingService } from './posting.service';
@@ -22,7 +21,7 @@ export class PostingController {
   constructor(private readonly postingService: PostingService) {}
 
   @UseGuards(TokenGuard)
-  @Get()
+  @Get('/')
   async getPost(): Promise<BaseResponse<Posting[]>> {
     const posts: Posting[] = await this.postingService.getPosts();
     return BaseResponse.successResponse('모든 게시글 조회 성공', posts);
@@ -36,16 +35,18 @@ export class PostingController {
   }
 
   @UseGuards(TokenGuard)
-  @Get('/movie')
+  @Get('/movie/title')
   async getPostByMovieTitle(
-    @Body() movie: string,
+    @Body() movie: any,
   ): Promise<BaseResponse<Posting[]>> {
-    const posts: Posting[] = await this.postingService.getPostsByMovie(movie);
+    const posts: Posting[] = await this.postingService.getPostsByMovie(
+      movie.movie,
+    );
     return BaseResponse.successResponse('영화 제목 별 조회', posts);
   }
 
   @UseGuards(TokenGuard)
-  @Get('/page')
+  @Get('/moive/page')
   async getPostByPage(
     @Query('page') page: number,
   ): Promise<BaseResponse<Posting[]>> {
