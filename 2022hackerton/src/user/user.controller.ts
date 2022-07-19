@@ -1,4 +1,7 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, UseGuards } from '@nestjs/common';
+import Auth from 'src/auth/entity/auth.entity';
+import { Token } from 'src/global/decorate/token.deocorate';
+import TokenGuard from 'src/global/guard/token.guard';
 import BaseResponse from 'src/global/response/baseResponse';
 import User from './entity/user.entity';
 import { UserService } from './user.service';
@@ -7,9 +10,10 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(TokenGuard)
   @Get('/')
-  async getUser(@Body() idx: number): Promise<BaseResponse<User>> {
-    const user: User = await this.userService.getUserByIdx(idx);
-    return BaseResponse.successResponse('성공', user);
+  async getUser(@Token() user: Auth): Promise<BaseResponse<User>> {
+    const userData: User = await this.userService.getUserByToken(user);
+    return BaseResponse.successResponse('성공', userData);
   }
 }

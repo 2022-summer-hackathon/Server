@@ -4,8 +4,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import Genre from './genre.entity';
+import PostingInfo from './postingInfo.entity';
 
 @Entity('posting')
 export default class Posting {
@@ -20,28 +23,16 @@ export default class Posting {
   movie: string;
 
   @Column({
-    name: 'text',
-    type: 'text',
-  })
-  text: string;
-
-  @Column({
     name: 'star',
   })
   star!: number;
 
-  @Column({})
-  @Column({
-    name: 'image',
-    default: '',
-    nullable: true,
-  })
-  image: string;
+  @JoinColumn({ name: 'fk_genre_idx' })
+  @ManyToOne(() => Genre, (genre) => genre.idx)
+  genre: Genre;
 
-  @Column({
-    name: 'category',
-  })
-  category!: string;
+  @OneToMany(() => PostingInfo, (postingInfo) => postingInfo.idx)
+  postingInfo: PostingInfo;
 
   @JoinColumn({ name: 'fk_user_idx' })
   @ManyToOne(() => User, (user) => user.posting)

@@ -7,7 +7,8 @@ export class UserRepository extends Repository<User> {
   public findUserWithAuthByIdx(idx: number): Promise<User> {
     return this.createQueryBuilder('user')
       .leftJoinAndSelect('user.auth', 'auth')
-      .where('idx = :idx', { idx })
+      .leftJoinAndSelect('user.posting', 'posting')
+      .where('user.idx = :idx', { idx })
       .getOne();
   }
 }

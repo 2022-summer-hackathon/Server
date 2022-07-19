@@ -5,16 +5,16 @@ import {
 } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import Auth from 'src/auth/entity/auth.entity';
-import User from 'src/user/entity/user.entity';
-import { UserService } from 'src/user/user.service';
 import PostDto from './dto/post.dto';
 import Posting from './entity/posting.entity';
 import { PostingRepository } from './repository/posting.repository';
+import { PostingInfoRepository } from './repository/postingInfo.repository';
 
 @Injectable()
 export class PostingService {
   constructor(
     private readonly postingRepository: PostingRepository,
+    private readonly postingInfoRepository: PostingInfoRepository,
     private readonly authService: AuthService,
   ) {}
 
@@ -36,6 +36,7 @@ export class PostingService {
     return posts;
   }
 
+  //안쓰는거
   async getPostByPage(page: number): Promise<Posting[]> {
     const postData: Posting[] = await this.postingRepository.find({
       order: {
@@ -49,29 +50,36 @@ export class PostingService {
 
   async addPost(user: Auth, dto: PostDto): Promise<void> {
     const userData: Auth = await this.authService.getAuthById(user.id);
-    const post: Posting = await this.postingRepository.create({
+    const info: Object = {
+      movie: dto.movie,
+      star: dto.star,
+      category: dto.category,
+      genre: dto.genre,
+    };
+    const post: Posting = await this.postingRepository.save({
       user: userData.user,
-      ...dto,
+      ...info,
     });
-    await this.postingRepository.save(post);
-  }
+    for (let i = 0; i < dto.text.length; i++) {
+      const info: Object = {
+        text: dto.text[i],
+        image: dto.image[i],
+      };
 
-  async modifyPost(user: Auth, idx: any, dto: PostDto): Promise<void> {
-    const checkPost: Posting = await this.postingRepository.getPostByUser(
-      idx.idx,
-    );
-    if (checkPost === null || checkPost === undefined) {
-      throw new NotFoundException('해당 게시글이 없습니다');
+      console.log({ text: dto.text[i], image: dto.image[i] });
+
+      const info2 = this.postingInfoRepository.create({
+        text: dto.text[i],
+        image: dto.image[i],
+      });
+
+      console.log(info2.text);
+
+      await this.postingInfoRepository.save({
+        posting: post,
+        ...info,
+      });
     }
-    const userData: Auth = await this.authService.getAuthById(user.id);
-    if (checkPost.user.idx !== userData.user.idx) {
-      throw new ForbiddenException('자신의 게시글만 수정할 수 있습니다');
-    }
-    const postData: Posting = await this.postingRepository.merge(
-      checkPost,
-      dto,
-    );
-    await this.postingRepository.save(postData);
   }
 
   async deletePost(idx: number): Promise<void> {

@@ -5,11 +5,14 @@ import Posting from '../entity/posting.entity';
 @CustomRepository(Posting)
 export class PostingRepository extends Repository<Posting> {
   public getPosts(): Promise<Posting[]> {
-    return this.createQueryBuilder('posting').getMany();
+    return this.createQueryBuilder('posting')
+      .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
+      .getMany();
   }
 
   public getPostByIdx(idx: number): Promise<Posting> {
     return this.createQueryBuilder('posting')
+      .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
       .where('idx = :idx', { idx })
       .getOne();
   }
@@ -17,12 +20,14 @@ export class PostingRepository extends Repository<Posting> {
   public getPostByUser(idx: number): Promise<Posting> {
     return this.createQueryBuilder('posting')
       .leftJoinAndSelect('posting.user', 'user')
+      .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
       .where('posting.idx = :idx', { idx: idx })
       .getOne();
   }
 
   public getPostByMovie(movie: string): Promise<Posting[]> {
     return this.createQueryBuilder('posting')
+      .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
       .where('movie = :movie', { movie })
       .getMany();
   }

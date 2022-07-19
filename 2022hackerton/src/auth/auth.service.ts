@@ -2,7 +2,6 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -12,7 +11,6 @@ import { AuthRepository } from './repository/auth.repository';
 import axios, { AxiosResponse } from 'axios';
 import { TokenService } from 'src/token/token.service';
 import { IloginData } from './interface/IloginData';
-import { UserService } from 'src/user/user.service';
 import { UserRepository } from 'src/user/repository/user.repository';
 
 @Injectable()

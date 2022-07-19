@@ -1,19 +1,27 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export default class PostDto {
   @IsString()
   @IsNotEmpty()
   movie!: string;
 
-  @IsString()
+  @IsArray()
   @IsNotEmpty()
-  text!: string;
+  text!: string[];
 
-  @IsString()
+  @IsArray()
   @IsNotEmpty()
-  image!: string;
+  image!: string[];
+
+  @IsNumber()
+  @IsNotEmpty()
+  star!: number;
 
   @IsString()
   @IsNotEmpty()
   category!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  genre!: string;
 }

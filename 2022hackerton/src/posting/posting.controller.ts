@@ -1,4 +1,5 @@
 import {
+  Bind,
   Body,
   Controller,
   Get,
@@ -6,9 +7,13 @@ import {
   Post,
   Put,
   Query,
+  UploadedFiles,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import Auth from 'src/auth/entity/auth.entity';
+import { multerDiskOptions } from 'src/config/multer/multer.option';
 import { Token } from 'src/global/decorate/token.deocorate';
 import TokenGuard from 'src/global/guard/token.guard';
 import BaseResponse from 'src/global/response/baseResponse';
@@ -67,14 +72,15 @@ export class PostingController {
     return BaseResponse.successResponse('게시글 생성 성공');
   }
 
-  @UseGuards(TokenGuard)
-  @Put('/:idx')
-  async modifyPost(
-    @Token() user: Auth,
-    @Body() dto: PostDto,
-    @Param() idx: number,
-  ): Promise<BaseResponse<void>> {
-    await this.postingService.modifyPost(user, idx, dto);
-    return BaseResponse.successResponse('게시글 수정 성공');
+  @Post('/image')
+  @UseInterceptors(FileInterceptor('image', multerDiskOptions))
+  @Bind(UploadedFiles)
+  async uploadImage(
+    @UploadedFiles() file: Express.Multer.File,
+  ): Promise<BaseResponse<string>> {
+    return BaseResponse.successResponse(
+      '사진 업로드 성공',
+      `http://localhost:6023/${file.path}`,
+    );
   }
 }
