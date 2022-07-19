@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import User from 'src/user/entity/user.entity';
+import { Column, Entity, OneToOne, PrimaryColumn } from 'typeorm';
 
 @Entity('auth')
 export default class Auth {
@@ -23,4 +24,7 @@ export default class Auth {
     nullable: true,
   })
   profileImage: string;
+
+  @OneToOne(() => User, (user) => user.auth)
+  user: User;
 }
