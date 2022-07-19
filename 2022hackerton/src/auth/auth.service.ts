@@ -73,14 +73,15 @@ export class AuthService {
         });
         const authData = await this.authRepository.save(user);
 
-        console.log(authData);
         const userData = await this.userRepository.create({
           name: result.data.data.uniqueId,
           level: 0,
           exp: 0,
         });
-        await this.userRepository.save({ ...authData, user: userData });
-        console.log(userData);
+        await this.userRepository.save({
+          ...userData,
+          auth: authData,
+        });
       }
 
       const token: string = await this.tokenService.generateToken(
@@ -99,8 +100,8 @@ export class AuthService {
       }
       return { userData, token, refreshToken };
     } catch (error) {
-      console.log(error);
-      switch (error.respoonse.data.status) {
+      console.log(error.response);
+      switch (error.respoonse.statusCode) {
         case 400:
           throw new BadRequestException('Bad request');
         case 401:

@@ -4,7 +4,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -38,7 +38,6 @@ export default class User {
   @OneToOne(() => Auth, (auth) => auth.user)
   auth!: Auth;
 
-  @JoinColumn({ name: 'fk_positng_idx' })
-  @ManyToOne(() => Posting, (posting) => posting.user)
+  @OneToMany(() => Posting, (posting) => posting.user)
   posting: Posting;
 }

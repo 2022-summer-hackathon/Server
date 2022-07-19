@@ -1,17 +1,23 @@
 import User from 'src/user/entity/user.entity';
-import { Column, Entity, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('posting')
 export default class Posting {
-  @PrimaryColumn({
+  @PrimaryGeneratedColumn({
     name: 'idx',
   })
-  id!: string;
+  idx!: string;
 
   @Column({
-    name: 'title',
+    name: 'movie',
   })
-  title: string;
+  movie: string;
 
   @Column({
     name: 'text',
@@ -19,6 +25,12 @@ export default class Posting {
   })
   text: string;
 
+  @Column({
+    name: 'star',
+  })
+  star!: number;
+
+  @Column({})
   @Column({
     name: 'image',
     default: '',
@@ -31,6 +43,7 @@ export default class Posting {
   })
   category!: string;
 
-  @OneToOne(() => User, (user) => user.posting)
+  @JoinColumn({ name: 'fk_user_idx' })
+  @ManyToOne(() => User, (user) => user.posting)
   user: User;
 }
