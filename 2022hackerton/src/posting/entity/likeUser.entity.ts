@@ -5,8 +5,6 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import Posting from './posting.entity';
@@ -16,7 +14,7 @@ export default class LikeUser {
   @PrimaryGeneratedColumn({
     name: 'idx',
   })
-  idx!: string;
+  idx!: number;
 
   @Column({
     name: 'is_like',

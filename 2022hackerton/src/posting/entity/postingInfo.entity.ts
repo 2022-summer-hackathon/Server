@@ -12,7 +12,7 @@ export default class PostingInfo {
   @PrimaryGeneratedColumn({
     name: 'idx',
   })
-  idx!: string;
+  idx!: number;
 
   @Column({
     name: 'text',

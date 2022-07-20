@@ -17,7 +17,7 @@ export default class Posting {
   @PrimaryGeneratedColumn({
     name: 'idx',
   })
-  idx!: string;
+  idx!: number;
 
   @Column({
     name: 'movie',

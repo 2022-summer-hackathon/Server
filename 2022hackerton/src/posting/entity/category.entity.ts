@@ -12,7 +12,7 @@ export default class Category {
   @PrimaryGeneratedColumn({
     name: 'idx',
   })
-  idx!: string;
+  idx!: number;
 
   @Column({
     name: 'category',
