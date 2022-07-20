@@ -1,13 +1,15 @@
 import User from 'src/user/entity/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import Genre from './genre.entity';
+import Category from './category.entity';
+import LikeUser from './likeUser.entity';
 import PostingInfo from './postingInfo.entity';
 
 @Entity('posting')
@@ -15,7 +17,7 @@ export default class Posting {
   @PrimaryGeneratedColumn({
     name: 'idx',
   })
-  idx!: string;
+  idx!: number;
 
   @Column({
     name: 'movie',
@@ -27,14 +29,27 @@ export default class Posting {
   })
   star!: number;
 
-  @JoinColumn({ name: 'fk_genre_idx' })
-  @ManyToOne(() => Genre, (genre) => genre.idx)
-  genre: Genre;
+  @Column({
+    name: 'like_cound',
+    default: 0,
+  })
+  likeCount!: number;
 
-  @OneToMany(() => PostingInfo, (postingInfo) => postingInfo.idx)
+  @CreateDateColumn({
+    name: 'create_at',
+  })
+  createAt!: Date;
+
+  @OneToMany(() => Category, (category) => category.posting)
+  category: Category;
+
+  @OneToMany(() => PostingInfo, (postingInfo) => postingInfo.posting)
   postingInfo: PostingInfo;
 
   @JoinColumn({ name: 'fk_user_idx' })
   @ManyToOne(() => User, (user) => user.posting)
   user: User;
+
+  @OneToMany(() => LikeUser, (likeUser) => likeUser.user)
+  likeUser: LikeUser;
 }

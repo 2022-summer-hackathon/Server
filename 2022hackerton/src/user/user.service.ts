@@ -22,4 +22,12 @@ export class UserService {
     );
     return userData;
   }
+
+  async getUserByAuth(user: Auth): Promise<User> {
+    const auth: Auth = await this.authService.getAuthById(user.id);
+    const userData = await this.userRepository.findUserWithAuthByIdx(
+      auth.user.idx,
+    );
+    return userData;
+  }
 }

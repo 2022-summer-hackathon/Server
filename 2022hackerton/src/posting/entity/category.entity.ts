@@ -7,27 +7,19 @@ import {
 } from 'typeorm';
 import Posting from './posting.entity';
 
-@Entity('posting_info')
-export default class PostingInfo {
+@Entity('category')
+export default class Category {
   @PrimaryGeneratedColumn({
     name: 'idx',
   })
   idx!: number;
 
   @Column({
-    name: 'text',
-    type: 'text',
-    nullable: true,
+    name: 'category',
   })
-  text: string;
-
-  @Column({
-    name: 'image',
-    default: null,
-  })
-  image: string;
+  category: string;
 
   @JoinColumn({ name: 'fk_posting_idx' })
-  @ManyToOne(() => Posting, (posting) => posting.postingInfo)
+  @ManyToOne(() => Posting, (posting) => posting.category)
   posting: Posting;
 }

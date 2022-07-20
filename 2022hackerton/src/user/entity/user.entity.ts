@@ -1,4 +1,5 @@
 import Auth from 'src/auth/entity/auth.entity';
+import LikeUser from 'src/posting/entity/likeUser.entity';
 import Posting from 'src/posting/entity/posting.entity';
 import {
   Column,

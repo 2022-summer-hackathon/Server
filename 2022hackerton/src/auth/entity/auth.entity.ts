@@ -1,5 +1,6 @@
+import LikeUser from 'src/posting/entity/likeUser.entity';
 import User from 'src/user/entity/user.entity';
-import { Column, Entity, OneToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
 
 @Entity('auth')
 export default class Auth {
@@ -20,11 +21,14 @@ export default class Auth {
 
   @Column({
     name: 'profile_image',
-    default: '',
+    default: null,
     nullable: true,
   })
   profileImage: string;
 
   @OneToOne(() => User, (user) => user.auth)
   user: User;
+
+  @OneToMany(() => LikeUser, (likeUser) => likeUser.user)
+  likeUser: LikeUser;
 }
