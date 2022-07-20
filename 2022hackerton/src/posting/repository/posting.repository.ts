@@ -9,6 +9,8 @@ export class PostingRepository extends Repository<Posting> {
       .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
       .leftJoinAndSelect('posting.category', 'category')
       .leftJoinAndSelect('posting.user', 'user')
+      .leftJoinAndSelect('user.auth', 'auth')
+      .orderBy('posting.create_at', 'DESC')
       .getMany();
   }
 
@@ -18,6 +20,7 @@ export class PostingRepository extends Repository<Posting> {
       .leftJoinAndSelect('posting.category', 'category')
       .leftJoinAndSelect('posting.user', 'user')
       .where('idx = :idx', { idx })
+      .orderBy('posting.create_at', 'ASC')
       .getOne();
   }
 
@@ -27,6 +30,7 @@ export class PostingRepository extends Repository<Posting> {
       .leftJoinAndSelect('posting.category', 'category')
       .leftJoinAndSelect('posting.user', 'user')
       .where('movie = :movie', { movie })
+      .orderBy('posting.create_at', 'ASC')
       .getMany();
   }
 
@@ -35,13 +39,16 @@ export class PostingRepository extends Repository<Posting> {
       .leftJoinAndSelect('posting.postingInfo', 'postingInfo')
       .leftJoinAndSelect('posting.category', 'category')
       .leftJoinAndSelect('posting.user', 'user')
+      .leftJoinAndSelect('user.auth', 'auth')
       .where('category.category = :category', { category })
+      .orderBy('posting.create_at', 'ASC')
       .getMany();
   }
 
   public getPostByIdx(idx: number): Promise<Posting> {
     return this.createQueryBuilder('posting')
       .where('idx = :idx', { idx })
+      .orderBy('posting.create_at', 'ASC')
       .getOne();
   }
 }

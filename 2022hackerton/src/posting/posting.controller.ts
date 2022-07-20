@@ -46,6 +46,13 @@ export class PostingController {
   async getPostBycategory(
     @Param('category') category: string,
   ): Promise<BaseResponse<Posting>> {
+    if (category == '전체') {
+      const posts: Posting[] = await this.postingService.getPosts();
+      return BaseResponse.successResponse(
+        '해당 장르의 게시글 조회 성공',
+        posts,
+      );
+    }
     const posts: Posting[] = await this.postingService.getPostByCategory(
       category,
     );

@@ -21,7 +21,7 @@ export default class Auth {
 
   @Column({
     name: 'profile_image',
-    default: '',
+    default: null,
     nullable: true,
   })
   profileImage: string;

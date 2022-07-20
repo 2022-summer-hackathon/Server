@@ -1,13 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import Auth from 'src/auth/entity/auth.entity';
+import LevelUpDto from 'src/user/dto/levelUp.dto';
 import User from 'src/user/entity/user.entity';
 import { UserRepository } from 'src/user/repository/user.repository';
-import { UserService } from 'src/user/user.service';
 import CountingDto from './dto/counting.dto';
 import IsValidDto from './dto/isValid.dto';
 import PostDto from './dto/post.dto';
-import LikeUser from './entity/likeUser.entity';
 import Posting from './entity/posting.entity';
 import { CategoryRepository } from './repository/category.repository';
 import { LikeUserRepository } from './repository/liekUser.repository';
@@ -23,7 +22,6 @@ export class PostingService {
     private readonly likeUserRepository: LikeUserRepository,
     private readonly userRepository: UserRepository,
     private readonly authService: AuthService,
-    private readonly userServie: UserService,
   ) {}
 
   async getPosts(): Promise<Posting[]> {
@@ -94,6 +92,18 @@ export class PostingService {
         ...info,
       });
     }
+
+    const userInfo: User = await this.userRepository.findUserByAuthId(user.id);
+    if (userInfo.exp + 50 >= 100) {
+      userInfo.level += 1;
+      userInfo.exp -= 100;
+    }
+    const levelUp: LevelUpDto = {
+      exp: userInfo.exp + 50,
+      level: userInfo.level,
+    };
+    const mergeUser: User = await this.userRepository.merge(userInfo, levelUp);
+    await this.userRepository.save(mergeUser);
   }
 
   async plusLikeCountInPost(idx: number, user: Auth): Promise<void> {

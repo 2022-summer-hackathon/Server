@@ -1,6 +1,7 @@
 import User from 'src/user/entity/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -33,6 +34,11 @@ export default class Posting {
     default: 0,
   })
   likeCount!: number;
+
+  @CreateDateColumn({
+    name: 'create_at',
+  })
+  createAt!: Date;
 
   @OneToMany(() => Category, (category) => category.posting)
   category: Category;
